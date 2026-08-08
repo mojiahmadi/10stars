@@ -20,7 +20,6 @@
             font-family: 'Vazirmatn', sans-serif;
             background: radial-gradient(circle at top, #003366 0%, #001122 100%);
             color: white;
-            overflow-x: hidden;
             min-height: 100vh;
         }
 
@@ -58,34 +57,44 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
         }
 
-        #criteria-grid:hover .glass-card {
-            filter: blur(4px);
-            opacity: 0.5;
-            transform: scale(0.95);
-        }
-        #criteria-grid .glass-card:hover {
-            filter: blur(0px);
-            opacity: 1;
-            transform: scale(1.15) translateY(-10px);
-            z-index: 20;
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #fbbf24;
-            box-shadow: 0 15px 35px -5px rgba(251, 191, 36, 0.4);
-        }
-        
         .desc-content {
             max-height: 0;
             opacity: 0;
             overflow: hidden;
             transition: all 0.4s ease;
         }
-        .glass-card:hover .desc-content {
-            max-height: 100px;
-            opacity: 1;
-            margin-top: 8px;
+
+        
+        @media (hover: hover) and (pointer: fine) {
+            #criteria-grid:hover .glass-card {
+                filter: blur(4px); opacity: 0.5; transform: scale(0.95);
+            }
+            #criteria-grid .glass-card:hover {
+                filter: blur(0px); opacity: 1; transform: scale(1.15) translateY(-10px);
+                z-index: 20; background: rgba(255, 255, 255, 0.15); border-color: #fbbf24;
+                box-shadow: 0 15px 35px -5px rgba(251, 191, 36, 0.4);
+            }
+            .glass-card:hover .desc-content {
+                max-height: 150px; opacity: 1; margin-top: 8px;
+            }
         }
+
+        
+        #criteria-grid.mobile-active .glass-card:not(.is-tapped) {
+            filter: blur(4px); opacity: 0.5; transform: scale(0.95);
+        }
+        #criteria-grid .glass-card.is-tapped {
+            filter: blur(0px); opacity: 1; transform: scale(1.05) translateY(-5px);
+            z-index: 20; background: rgba(255, 255, 255, 0.15); border-color: #fbbf24;
+            box-shadow: 0 10px 25px -5px rgba(251, 191, 36, 0.4);
+        }
+        .glass-card.is-tapped .desc-content {
+            max-height: 150px; opacity: 1; margin-top: 8px;
+        }
+        
 
         .rating-star { cursor: pointer; transition: all 0.2s ease; color: rgba(255, 255, 255, 0.2); }
         .rating-star:hover { transform: scale(1.15); }
@@ -105,12 +114,13 @@
         }
     </style>
 </head>
-<body class="p-4 lg:p-8 flex items-center justify-center relative overflow-hidden">
+
+<body class="py-12 px-4 lg:p-8 relative overflow-x-hidden min-h-screen grid place-items-center">
 
     <div class="stars-bg"></div>
     <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-yellow-500/20 rounded-[100%] blur-[100px] pointer-events-none"></div>
 
-    <div class="glass-panel w-full max-w-5xl rounded-[2rem] p-6 md:p-10 relative z-10">
+    <div class="glass-panel w-full max-w-5xl rounded-[2rem] p-6 md:p-10 relative z-10 my-auto">
         
         
         <div id="phase-intro" class="slide-up">
@@ -187,7 +197,6 @@
                     
                     <div class="mt-8 text-white/50 text-[13px] flex justify-between items-center border-t border-white/10 pt-6 relative z-10 w-full">
                         <span class="font-bold flex items-center gap-1 text-white/80">
-                            <!-- SVG جایگزین verified -->
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-yellow-500">
                               <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
                             </svg>
@@ -216,26 +225,16 @@
 
     <script>
         const criteriaData = [
-            { id: 1, fa: "ارائه‌دهنده", icon: "healing", desc: "کسی که بلد خوب توضیح بده و ارائه بده.",
-              scenario: "در محیط کارآموزی یا بالینی، چقدر در ارائه یک مراقبت ایمن، اصولی و همراه با توضیح روشنِ روند کار به مراجعین مهارت داری؟" },
-            { id: 2, fa: "تصمیم‌ساز", icon: "psychology", desc: "انتخاب بهترین راه وسط شلوغی‌ها.",
-              scenario: "در شرایط پیش‌بینی‌نشده و پرفشار، چقدر می‌توانی خونسردی‌ات را حفظ کرده و سریعاً منطقی‌ترین راهکار را انتخاب کنی؟" },
-            { id: 3, fa: "ارتباط‌گیر", icon: "support_agent", desc: "خوب گوش میده و راحت ارتباط میگیره.",
-              scenario: "وقتی مراجع یا همراهش دچار اضطراب یا ابهام است، چقدر راحت می‌توانی با گوش دادن و صحبت کردن موثر، با او ارتباط بگیری؟" },
-            { id: 4, fa: "مدیر", icon: "query_stats", desc: "بلد کارها رو برنامه‌ریزی کنه.",
-              scenario: "در انجام پروژه‌های گروهی یا شیفت‌های شلوغ، چقدر در برنامه‌ریزی کارها، زمان‌بندی و استفاده بهینه از امکانات موجود موفق هستی؟" },
-            { id: 5, fa: "رهبر", icon: "school", desc: "راه رو نشون می‌ده و الهام‌بخشه.",
-              scenario: "در کارهای تیمی، چقدر می‌توانی به سایر اعضا انگیزه بدهی، مسئولیت‌پذیر باشی و جلوتر از همه برای رسیدن به هدف حرکت کنی؟" },
-            { id: 6, fa: "یادگیرنده", icon: "menu_book", desc: "همیشه دنبال یادگرفتن و کنجکاوه.",
-              scenario: "وقتی با یک مبحث جدید یا مشکل علمی روبرو می‌شوی، چقدر با کنجکاوی به دنبال مطالعه منابع معتبر و کشف جواب می‌روی؟" },
-            { id: 7, fa: "معلم", icon: "history_edu", desc: "مفاهیم سخت رو ساده می‌کنه.",
-              scenario: "اگر یک دانشجوی ترم پایین‌تر از تو بخواهد یک مفهوم سخت را توضیح دهی، چقدر در انتقال ساده و جذابِ مطالب مهارت داری؟" },
-            { id: 8, fa: "پژوهشگر", icon: "science", desc: "سوال می‌پرسه و دنبال جوابه.",
-              scenario: "چقدر اهل سوال پرسیدن، بررسی مقالات علمی و تلاش برای یافتن پاسخ‌های مستند برای چالش‌های رشته‌ات هستی؟" },
-            { id: 9, fa: "تغییرساز مثبت", icon: "published_with_changes", desc: "انرژی خوبی برای شروع اتفاقات داره.",
-              scenario: "وقتی در سیستم آموزشی یا محیط کار یک نقص می‌بینی، چقدر با انرژی مثبت برای ارائه راهکار و رفع آن نقص تلاش می‌کنی؟" },
-            { id: 10, fa: "کارآفرین", icon: "lightbulb", desc: "ایده داره و ریسک می‌کنه.",
-              scenario: "چقدر جسارت ایده‌پردازی داری و می‌توانی برای خلق یک ارزش جدید در حوزه سلامت یا دانشگاه، مسیرهای نوآورانه بسازی؟" }
+            { id: 1, fa: "ارائه‌دهنده", icon: "healing", desc: "کسی که بلد خوب توضیح بده و ارائه بده.", scenario: "در محیط کارآموزی یا بالینی، چقدر در ارائه یک مراقبت ایمن، اصولی و همراه با توضیح روشنِ روند کار به مراجعین مهارت داری؟" },
+            { id: 2, fa: "تصمیم‌ساز", icon: "psychology", desc: "انتخاب بهترین راه وسط شلوغی‌ها.", scenario: "در شرایط پیش‌بینی‌نشده و پرفشار، چقدر می‌توانی خونسردی‌ات را حفظ کرده و سریعاً منطقی‌ترین راهکار را انتخاب کنی؟" },
+            { id: 3, fa: "ارتباط‌گیر", icon: "support_agent", desc: "خوب گوش میده و راحت ارتباط میگیره.", scenario: "وقتی مراجع یا همراهش دچار اضطراب یا ابهام است، چقدر راحت می‌توانی با گوش دادن و صحبت کردن موثر، با او ارتباط بگیری؟" },
+            { id: 4, fa: "مدیر", icon: "query_stats", desc: "بلد کارها رو برنامه‌ریزی کنه.", scenario: "در انجام پروژه‌های گروهی یا شیفت‌های شلوغ، چقدر در برنامه‌ریزی کارها، زمان‌بندی و استفاده بهینه از امکانات موجود موفق هستی؟" },
+            { id: 5, fa: "رهبر", icon: "school", desc: "راه رو نشون می‌ده و الهام‌بخشه.", scenario: "در کارهای تیمی، چقدر می‌توانی به سایر اعضا انگیزه بدهی، مسئولیت‌پذیر باشی و جلوتر از همه برای رسیدن به هدف حرکت کنی؟" },
+            { id: 6, fa: "یادگیرنده", icon: "menu_book", desc: "همیشه دنبال یادگرفتن و کنجکاوه.", scenario: "وقتی با یک مبحث جدید یا مشکل علمی روبرو می‌شوی، چقدر با کنجکاوی به دنبال مطالعه منابع معتبر و کشف جواب می‌روی؟" },
+            { id: 7, fa: "معلم", icon: "history_edu", desc: "مفاهیم سخت رو ساده می‌کنه.", scenario: "اگر یک دانشجوی ترم پایین‌تر از تو بخواهد یک مفهوم سخت را توضیح دهی، چقدر در انتقال ساده و جذابِ مطالب مهارت داری؟" },
+            { id: 8, fa: "پژوهشگر", icon: "science", desc: "سوال می‌پرسه و دنبال جوابه.", scenario: "چقدر اهل سوال پرسیدن، بررسی مقالات علمی و تلاش برای یافتن پاسخ‌های مستند برای چالش‌های رشته‌ات هستی؟" },
+            { id: 9, fa: "تغییرساز مثبت", icon: "published_with_changes", desc: "انرژی خوبی برای شروع اتفاقات داره.", scenario: "وقتی در سیستم آموزشی یا محیط کار یک نقص می‌بینی، چقدر با انرژی مثبت برای ارائه راهکار و رفع آن نقص تلاش می‌کنی؟" },
+            { id: 10, fa: "کارآفرین", icon: "lightbulb", desc: "ایده داره و ریسک می‌کنه.", scenario: "چقدر جسارت ایده‌پردازی داری و می‌توانی برای خلق یک ارزش جدید در حوزه سلامت یا دانشگاه، مسیرهای نوآورانه بسازی؟" }
         ];
 
         function toPersianNum(num) {
@@ -254,7 +253,29 @@
                     <span class="text-[11px] text-white/60 leading-relaxed block">${item.desc}</span>
                 </div>
             `;
+            
+            
+            card.addEventListener('click', function(e) {
+                e.stopPropagation(); 
+                
+                if (this.classList.contains('is-tapped')) {
+                    this.classList.remove('is-tapped');
+                    gridContainer.classList.remove('mobile-active');
+                } else {
+                    document.querySelectorAll('.glass-card').forEach(c => c.classList.remove('is-tapped'));
+                    this.classList.add('is-tapped');
+                    gridContainer.classList.add('mobile-active');
+                }
+            });
+            
             gridContainer.appendChild(card);
+        });
+
+        
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.glass-card').forEach(c => c.classList.remove('is-tapped'));
+            const grid = document.getElementById('criteria-grid');
+            if(grid) grid.classList.remove('mobile-active');
         });
 
         let currentStep = 0;
@@ -296,7 +317,7 @@
             starContainer.innerHTML = '';
             for(let i = 10; i >= 1; i--) {
                 const star = document.createElement('span');
-                star.className = 'material-icons-round text-3xl md:text-[40px] rating-star';
+                star.className = 'material-icons-round text-4xl md:text-[40px] rating-star';
                 star.textContent = 'star';
                 star.dataset.value = i;
                 
