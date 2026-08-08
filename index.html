@@ -67,7 +67,6 @@
             transition: all 0.4s ease;
         }
 
-        
         @media (hover: hover) and (pointer: fine) {
             #criteria-grid:hover .glass-card {
                 filter: blur(4px); opacity: 0.5; transform: scale(0.95);
@@ -82,7 +81,6 @@
             }
         }
 
-        
         #criteria-grid.mobile-active .glass-card:not(.is-tapped) {
             filter: blur(4px); opacity: 0.5; transform: scale(0.95);
         }
@@ -94,7 +92,6 @@
         .glass-card.is-tapped .desc-content {
             max-height: 150px; opacity: 1; margin-top: 8px;
         }
-        
 
         .rating-star { cursor: pointer; transition: all 0.2s ease; color: rgba(255, 255, 255, 0.2); }
         .rating-star:hover { transform: scale(1.15); }
@@ -114,13 +111,12 @@
         }
     </style>
 </head>
-
-<body class="py-12 px-4 lg:p-8 relative overflow-x-hidden min-h-screen grid place-items-center">
+<body class="py-12 px-4 lg:p-8 relative overflow-x-hidden min-h-screen grid place-items-center w-full">
 
     <div class="stars-bg"></div>
     <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-yellow-500/20 rounded-[100%] blur-[100px] pointer-events-none"></div>
 
-    <div class="glass-panel w-full max-w-5xl rounded-[2rem] p-6 md:p-10 relative z-10 my-auto">
+    <div class="glass-panel w-full max-w-5xl rounded-[2rem] p-5 sm:p-6 md:p-10 relative z-10 my-auto">
         
         
         <div id="phase-intro" class="slide-up">
@@ -131,7 +127,7 @@
                 <p class="text-yellow-400/80 text-sm font-light">طراحی شده توسط انجمن علمی هوشبری تبریز</p>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12" id="criteria-grid"></div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 mb-12" id="criteria-grid"></div>
 
             <div class="max-w-md mx-auto mb-6">
                 <input type="text" id="student-name-input" placeholder="نام خود را وارد کنید..." class="w-full glass-card rounded-xl px-5 py-4 text-white text-center focus:outline-none focus:border-yellow-400 transition-all placeholder:text-white/40 font-bold text-lg border">
@@ -145,59 +141,61 @@
             </div>
         </div>
 
-        
-        <div id="phase-assessment" class="hidden">
+        <!-- ================= فاز ۲: ارزیابی موقعیت‌محور ================= -->
+        <div id="phase-assessment" class="hidden w-full">
             <div class="flex justify-between items-center mb-8 text-xs font-semibold text-white/50 border-b border-white/10 pb-4">
                 <span id="student-name-display" class="text-yellow-400 text-sm bg-yellow-400/10 px-4 py-1 rounded-full border border-yellow-400/20">نام دانشجو</span>
                 <span id="step-counter" dir="ltr" class="glass-card px-4 py-1 rounded-full font-mono">1 / 10</span>
             </div>
             
-            <div class="text-center mb-12 mt-4 fade-in" id="assessment-content">
-                <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl glass-card mb-6 border-yellow-400/30">
-                    <span id="criterion-icon" class="material-icons-round text-4xl text-yellow-400"></span>
+            <div class="text-center mb-10 mt-4 fade-in" id="assessment-content">
+                <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl glass-card mb-6 border-yellow-400/30">
+                    <span id="criterion-icon" class="material-icons-round text-3xl sm:text-4xl text-yellow-400"></span>
                 </div>
-                <h2 id="criterion-title" class="text-3xl font-bold mb-6 text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70"></h2>
+                <h2 id="criterion-title" class="text-2xl sm:text-3xl font-bold mb-6 text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70"></h2>
                 
-                <div class="glass-card p-6 rounded-2xl max-w-2xl mx-auto border-l-4 border-l-yellow-400 relative overflow-hidden">
+                <div class="glass-card p-4 sm:p-6 rounded-2xl max-w-2xl mx-auto border-l-4 border-l-yellow-400 relative overflow-hidden">
                     <div class="absolute -top-4 -right-4 opacity-10">
-                        <span class="material-icons-round text-9xl">help_outline</span>
+                        <span class="material-icons-round text-7xl sm:text-9xl">help_outline</span>
                     </div>
-                    <p id="criterion-scenario" class="text-white/90 text-lg leading-relaxed font-light relative z-10"></p>
+                    <p id="criterion-scenario" class="text-white/90 text-[15px] sm:text-lg leading-relaxed font-light relative z-10"></p>
                 </div>
             </div>
             
-            <div class="mb-12">
-                <div class="flex justify-center gap-1 md:gap-3 flex-row-reverse" id="star-rating-system" dir="ltr"></div>
+            <div class="mb-10 w-full overflow-hidden">
+                
+                <div class="flex justify-center gap-[2px] xs:gap-1 sm:gap-2 md:gap-3 flex-row-reverse w-full" id="star-rating-system" dir="ltr"></div>
                 <div class="text-center mt-6">
                     <span class="text-white/40 text-sm mr-2">امتیاز شما:</span>
-                    <span id="score-display-text" class="text-4xl font-bold text-yellow-400">۵</span>
+                    <span id="score-display-text" class="text-3xl sm:text-4xl font-bold text-yellow-400">۵</span>
                 </div>
             </div>
 
-            <button id="next-btn" class="w-full max-w-md mx-auto block glass-card hover:bg-white/10 text-white py-4 rounded-xl font-bold text-lg transition-all">
+            <button id="next-btn" class="w-full max-w-md mx-auto block glass-card hover:bg-white/10 text-white py-4 rounded-xl font-bold text-base sm:text-lg transition-all">
                 ثبت و سوال بعدی
             </button>
         </div>
 
         
-        <div id="phase-result" class="hidden text-center">
+        <div id="phase-result" class="hidden text-center w-full">
             
-            <div class="mx-auto max-w-2xl mb-8">
-                <div id="export-banner" class="bg-[#001f3f] border border-white/20 rounded-3xl p-8 relative overflow-hidden shadow-2xl w-full">
+            <div class="mx-auto max-w-2xl mb-8 w-full">
+                <div id="export-banner" class="bg-[#001f3f] border border-white/20 rounded-3xl p-5 sm:p-8 relative overflow-hidden shadow-2xl w-full">
                     <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-30"></div>
                     
-                    <h2 id="banner-student-name" class="text-yellow-400 text-3xl md:text-4xl mb-6 mt-4 font-bold relative z-10">نام دانشجو</h2>
+                    <h2 id="banner-student-name" class="text-yellow-400 text-2xl sm:text-3xl md:text-4xl mb-6 mt-2 sm:mt-4 font-bold relative z-10">نام دانشجو</h2>
                     
                     <div class="flex justify-center items-center gap-1 mb-4 flex-row-reverse relative z-10" id="banner-stars" dir="ltr"></div>
-                    <p id="banner-star-text" class="text-2xl font-bold text-white mb-8 relative z-10">دانشجوی ۸ ستاره</p>
+                    <p id="banner-star-text" class="text-xl sm:text-2xl font-bold text-white mb-8 relative z-10">دانشجوی ۸ ستاره</p>
 
-                    <div class="relative w-full max-w-[350px] aspect-square mx-auto glass-card rounded-full p-6 relative z-10">
+                    
+                    <div class="relative w-full max-w-[260px] sm:max-w-[350px] aspect-square mx-auto glass-card rounded-full p-4 sm:p-6 relative z-10">
                         <canvas id="radarChart"></canvas>
                     </div>
                     
-                    <div class="mt-8 text-white/50 text-[13px] flex justify-between items-center border-t border-white/10 pt-6 relative z-10 w-full">
+                    <div class="mt-8 text-white/50 text-[11px] sm:text-[13px] flex justify-between items-center border-t border-white/10 pt-4 sm:pt-6 relative z-10 w-full">
                         <span class="font-bold flex items-center gap-1 text-white/80">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-yellow-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500">
                               <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
                             </svg>
                             انجمن علمی هوشبری
@@ -245,19 +243,17 @@
         const gridContainer = document.getElementById('criteria-grid');
         criteriaData.forEach(item => {
             const card = document.createElement('div');
-            card.className = `glass-card rounded-xl p-4 flex flex-col items-center text-center`;
+            card.className = `glass-card rounded-xl p-3 sm:p-4 flex flex-col items-center text-center`;
             card.innerHTML = `
-                <span class="material-icons-round text-3xl text-yellow-400 mb-2 transition-transform">${item.icon}</span>
-                <span class="text-sm font-bold text-white">${item.fa}</span>
+                <span class="material-icons-round text-2xl sm:text-3xl text-yellow-400 mb-2 transition-transform">${item.icon}</span>
+                <span class="text-xs sm:text-sm font-bold text-white">${item.fa}</span>
                 <div class="desc-content">
-                    <span class="text-[11px] text-white/60 leading-relaxed block">${item.desc}</span>
+                    <span class="text-[10px] sm:text-[11px] text-white/60 leading-relaxed block">${item.desc}</span>
                 </div>
             `;
             
-            
             card.addEventListener('click', function(e) {
-                e.stopPropagation(); 
-                
+                e.stopPropagation();
                 if (this.classList.contains('is-tapped')) {
                     this.classList.remove('is-tapped');
                     gridContainer.classList.remove('mobile-active');
@@ -271,7 +267,6 @@
             gridContainer.appendChild(card);
         });
 
-        
         document.addEventListener('click', function() {
             document.querySelectorAll('.glass-card').forEach(c => c.classList.remove('is-tapped'));
             const grid = document.getElementById('criteria-grid');
@@ -317,7 +312,8 @@
             starContainer.innerHTML = '';
             for(let i = 10; i >= 1; i--) {
                 const star = document.createElement('span');
-                star.className = 'material-icons-round text-4xl md:text-[40px] rating-star';
+                
+                star.className = 'material-icons-round text-[25px] xs:text-[28px] sm:text-4xl md:text-[40px] rating-star';
                 star.textContent = 'star';
                 star.dataset.value = i;
                 
@@ -358,7 +354,7 @@
             const nextBtn = document.getElementById('next-btn');
             if (currentStep === criteriaData.length - 1) {
                 nextBtn.innerHTML = 'مشاهده کارنامه نهایی';
-                nextBtn.className = 'w-full max-w-md mx-auto block bg-gradient-to-r from-yellow-500 to-yellow-600 text-blue-950 py-4 rounded-xl font-bold text-lg hover:shadow-[0_0_15px_rgba(251,191,36,0.4)] transition-all';
+                nextBtn.className = 'w-full max-w-md mx-auto block bg-gradient-to-r from-yellow-500 to-yellow-600 text-blue-950 py-4 rounded-xl font-bold text-base sm:text-lg hover:shadow-[0_0_15px_rgba(251,191,36,0.4)] transition-all';
             }
         }
 
@@ -401,7 +397,7 @@
             for(let i=10; i>=1; i--) {
                 const s = document.createElement('div');
                 const isEarned = i <= earnedStars;
-                s.className = `w-7 h-7 flex items-center justify-center ${isEarned ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.8)]' : 'text-white/10'}`;
+                s.className = `w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center ${isEarned ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.8)]' : 'text-white/10'}`;
                 s.innerHTML = svgStar;
                 bannerStarsContainer.appendChild(s);
             }
@@ -426,7 +422,7 @@
                         borderColor: '#fbbf24',
                         pointBackgroundColor: '#001f3f',
                         pointBorderColor: '#fbbf24',
-                        pointRadius: 4,
+                        pointRadius: 3,
                         borderWidth: 2,
                     }]
                 },
@@ -438,7 +434,7 @@
                         r: {
                             angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
                             grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            pointLabels: { font: { size: 11, family: 'Vazirmatn', weight: 'bold' } },
+                            pointLabels: { font: { size: 9, family: 'Vazirmatn', weight: 'bold' } },
                             ticks: { display: false, min: 0, max: 10 }
                         }
                     },
@@ -460,10 +456,7 @@
                 backgroundColor: '#001f3f',
                 width: bannerElement.scrollWidth,
                 height: bannerElement.scrollHeight,
-                style: {
-                    margin: '0',
-                    transform: 'none'
-                }
+                style: { margin: '0', transform: 'none' }
             })
             .then(function (dataUrl) {
                 const link = document.createElement('a');
@@ -486,7 +479,7 @@
             
             const nextBtn = document.getElementById('next-btn');
             nextBtn.innerHTML = 'ثبت و سوال بعدی';
-            nextBtn.className = 'w-full max-w-md mx-auto block glass-card hover:bg-white/10 text-white py-4 rounded-xl font-bold text-lg transition-all';
+            nextBtn.className = 'w-full max-w-md mx-auto block glass-card hover:bg-white/10 text-white py-4 rounded-xl font-bold text-base sm:text-lg transition-all';
 
             document.getElementById('phase-result').classList.add('hidden');
             const phase1 = document.getElementById('phase-intro');
