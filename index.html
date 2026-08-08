@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دانشجوی ده‌ستاره | ارزیابی جامع</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html-to-image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+    <!-- Vazirmatn Font -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: radial-gradient(circle at top, #003366 0%, #001122 100%);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .stars-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 5s infinite linear;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        @keyframes twinkle { 0% { opacity: 0.3; } 50% { opacity: 0.6; } 100% { opacity: 0.3; } }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #criteria-grid:hover .glass-card {
+            filter: blur(4px);
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+        #criteria-grid .glass-card:hover {
+            filter: blur(0px);
+            opacity: 1;
+            transform: scale(1.15) translateY(-10px);
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #fbbf24;
+            box-shadow: 0 15px 35px -5px rgba(251, 191, 36, 0.4);
+        }
+        
+        .desc-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover .desc-content {
+            max-height: 100px;
+            opacity: 1;
+            margin-top: 8px;
+        }
+
+        .rating-star { cursor: pointer; transition: all 0.2s ease; color: rgba(255, 255, 255, 0.2); }
+        .rating-star:hover { transform: scale(1.15); }
+        .rating-star.active { color: #fbbf24; filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.7)); }
+
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="p-4 lg:p-8 flex items-center justify-center relative overflow-hidden">
+
+    <div class="stars-bg"></div>
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-yellow-500/20 rounded-[100%] blur-[100px] pointer-events-none"></div>
+
+    <div class="glass-panel w-full max-w-5xl rounded-[2rem] p-6 md:p-10 relative z-10">
+        
+        
+        <div id="phase-intro" class="slide-up">
+            
+            <div class="text-center mb-10">
+                <span class="material-icons-round text-5xl text-yellow-400 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)] mb-2">school</span>
+                <h1 class="text-3xl md:text-4xl font-bold mb-2 text-white">دانشجـوی ده‌ستـاره</h1>
+                <p class="text-yellow-400/80 text-sm font-light">طراحی شده توسط انجمن علمی هوشبری تبریز</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12" id="criteria-grid"></div>
+
+            <div class="max-w-md mx-auto mb-6">
+                <input type="text" id="student-name-input" placeholder="نام خود را وارد کنید..." class="w-full glass-card rounded-xl px-5 py-4 text-white text-center focus:outline-none focus:border-yellow-400 transition-all placeholder:text-white/40 font-bold text-lg border">
+            </div>
+
+            <div class="text-center">
+                <button id="start-btn" class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-blue-950 py-4 px-12 rounded-full font-bold text-lg hover:shadow-[0_0_20px_rgba(251,191,36,0.4)] transition-all flex items-center justify-center mx-auto gap-2">
+                    ورود به ارزیابی
+                    <span class="material-icons-round text-lg">arrow_back</span>
+                </button>
+            </div>
+        </div>
+
+        
+        <div id="phase-assessment" class="hidden">
+            <div class="flex justify-between items-center mb-8 text-xs font-semibold text-white/50 border-b border-white/10 pb-4">
+                <span id="student-name-display" class="text-yellow-400 text-sm bg-yellow-400/10 px-4 py-1 rounded-full border border-yellow-400/20">نام دانشجو</span>
+                <span id="step-counter" dir="ltr" class="glass-card px-4 py-1 rounded-full font-mono">1 / 10</span>
+            </div>
+            
+            <div class="text-center mb-12 mt-4 fade-in" id="assessment-content">
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl glass-card mb-6 border-yellow-400/30">
+                    <span id="criterion-icon" class="material-icons-round text-4xl text-yellow-400"></span>
+                </div>
+                <h2 id="criterion-title" class="text-3xl font-bold mb-6 text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70"></h2>
+                
+                <div class="glass-card p-6 rounded-2xl max-w-2xl mx-auto border-l-4 border-l-yellow-400 relative overflow-hidden">
+                    <div class="absolute -top-4 -right-4 opacity-10">
+                        <span class="material-icons-round text-9xl">help_outline</span>
+                    </div>
+                    <p id="criterion-scenario" class="text-white/90 text-lg leading-relaxed font-light relative z-10"></p>
+                </div>
+            </div>
+            
+            <div class="mb-12">
+                <div class="flex justify-center gap-1 md:gap-3 flex-row-reverse" id="star-rating-system" dir="ltr"></div>
+                <div class="text-center mt-6">
+                    <span class="text-white/40 text-sm mr-2">امتیاز شما:</span>
+                    <span id="score-display-text" class="text-4xl font-bold text-yellow-400">۵</span>
+                </div>
+            </div>
+
+            <button id="next-btn" class="w-full max-w-md mx-auto block glass-card hover:bg-white/10 text-white py-4 rounded-xl font-bold text-lg transition-all">
+                ثبت و سوال بعدی
+            </button>
+        </div>
+
+        
+        <div id="phase-result" class="hidden text-center">
+            
+            <div class="mx-auto max-w-2xl mb-8">
+                <div id="export-banner" class="bg-[#001f3f] border border-white/20 rounded-3xl p-8 relative overflow-hidden shadow-2xl w-full">
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-30"></div>
+                    
+                    <h2 id="banner-student-name" class="text-yellow-400 text-3xl md:text-4xl mb-6 mt-4 font-bold relative z-10">نام دانشجو</h2>
+                    
+                    <div class="flex justify-center items-center gap-1 mb-4 flex-row-reverse relative z-10" id="banner-stars" dir="ltr"></div>
+                    <p id="banner-star-text" class="text-2xl font-bold text-white mb-8 relative z-10">دانشجوی ۸ ستاره</p>
+
+                    <div class="relative w-full max-w-[350px] aspect-square mx-auto glass-card rounded-full p-6 relative z-10">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                    
+                    <div class="mt-8 text-white/50 text-[13px] flex justify-between items-center border-t border-white/10 pt-6 relative z-10 w-full">
+                        <span class="font-bold flex items-center gap-1 text-white/80">
+                            <!-- SVG جایگزین verified -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-yellow-500">
+                              <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                            </svg>
+                            انجمن علمی هوشبری
+                        </span>
+                        <span class="flex items-center gap-1 font-medium">
+                            تاریخ: 
+                            <span id="banner-date" dir="ltr" class="font-mono text-white/80 inline-block mt-0.5"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button id="download-btn" class="bg-yellow-500 text-blue-950 py-4 px-8 rounded-xl font-bold text-sm hover:bg-yellow-400 transition-all flex items-center justify-center gap-2">
+                    <span class="material-icons-round">download</span>
+                    دانلود ریپورت گرافیکی
+                </button>
+                <button id="restart-btn" class="glass-card text-white py-4 px-8 rounded-xl font-bold text-sm hover:bg-white/10 transition-all">
+                    ارزیابی مجدد
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const criteriaData = [
+            { id: 1, fa: "ارائه‌دهنده", icon: "healing", desc: "کسی که بلد خوب توضیح بده و ارائه بده.",
+              scenario: "در محیط کارآموزی یا بالینی، چقدر در ارائه یک مراقبت ایمن، اصولی و همراه با توضیح روشنِ روند کار به مراجعین مهارت داری؟" },
+            { id: 2, fa: "تصمیم‌ساز", icon: "psychology", desc: "انتخاب بهترین راه وسط شلوغی‌ها.",
+              scenario: "در شرایط پیش‌بینی‌نشده و پرفشار، چقدر می‌توانی خونسردی‌ات را حفظ کرده و سریعاً منطقی‌ترین راهکار را انتخاب کنی؟" },
+            { id: 3, fa: "ارتباط‌گیر", icon: "support_agent", desc: "خوب گوش میده و راحت ارتباط میگیره.",
+              scenario: "وقتی مراجع یا همراهش دچار اضطراب یا ابهام است، چقدر راحت می‌توانی با گوش دادن و صحبت کردن موثر، با او ارتباط بگیری؟" },
+            { id: 4, fa: "مدیر", icon: "query_stats", desc: "بلد کارها رو برنامه‌ریزی کنه.",
+              scenario: "در انجام پروژه‌های گروهی یا شیفت‌های شلوغ، چقدر در برنامه‌ریزی کارها، زمان‌بندی و استفاده بهینه از امکانات موجود موفق هستی؟" },
+            { id: 5, fa: "رهبر", icon: "school", desc: "راه رو نشون می‌ده و الهام‌بخشه.",
+              scenario: "در کارهای تیمی، چقدر می‌توانی به سایر اعضا انگیزه بدهی، مسئولیت‌پذیر باشی و جلوتر از همه برای رسیدن به هدف حرکت کنی؟" },
+            { id: 6, fa: "یادگیرنده", icon: "menu_book", desc: "همیشه دنبال یادگرفتن و کنجکاوه.",
+              scenario: "وقتی با یک مبحث جدید یا مشکل علمی روبرو می‌شوی، چقدر با کنجکاوی به دنبال مطالعه منابع معتبر و کشف جواب می‌روی؟" },
+            { id: 7, fa: "معلم", icon: "history_edu", desc: "مفاهیم سخت رو ساده می‌کنه.",
+              scenario: "اگر یک دانشجوی ترم پایین‌تر از تو بخواهد یک مفهوم سخت را توضیح دهی، چقدر در انتقال ساده و جذابِ مطالب مهارت داری؟" },
+            { id: 8, fa: "پژوهشگر", icon: "science", desc: "سوال می‌پرسه و دنبال جوابه.",
+              scenario: "چقدر اهل سوال پرسیدن، بررسی مقالات علمی و تلاش برای یافتن پاسخ‌های مستند برای چالش‌های رشته‌ات هستی؟" },
+            { id: 9, fa: "تغییرساز مثبت", icon: "published_with_changes", desc: "انرژی خوبی برای شروع اتفاقات داره.",
+              scenario: "وقتی در سیستم آموزشی یا محیط کار یک نقص می‌بینی، چقدر با انرژی مثبت برای ارائه راهکار و رفع آن نقص تلاش می‌کنی؟" },
+            { id: 10, fa: "کارآفرین", icon: "lightbulb", desc: "ایده داره و ریسک می‌کنه.",
+              scenario: "چقدر جسارت ایده‌پردازی داری و می‌توانی برای خلق یک ارزش جدید در حوزه سلامت یا دانشگاه، مسیرهای نوآورانه بسازی؟" }
+        ];
+
+        function toPersianNum(num) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return num.toString().replace(/\d/g, x => persianDigits[x]);
+        }
+
+        const gridContainer = document.getElementById('criteria-grid');
+        criteriaData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = `glass-card rounded-xl p-4 flex flex-col items-center text-center`;
+            card.innerHTML = `
+                <span class="material-icons-round text-3xl text-yellow-400 mb-2 transition-transform">${item.icon}</span>
+                <span class="text-sm font-bold text-white">${item.fa}</span>
+                <div class="desc-content">
+                    <span class="text-[11px] text-white/60 leading-relaxed block">${item.desc}</span>
+                </div>
+            `;
+            gridContainer.appendChild(card);
+        });
+
+        let currentStep = 0;
+        let scores = [];
+        let currentRating = 5;
+        let studentName = "";
+        let radarChartInstance = null;
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            const inputField = document.getElementById('student-name-input');
+            studentName = inputField.value.trim();
+            
+            if (!studentName) {
+                inputField.classList.add('border-red-500', 'animate-shake');
+                inputField.classList.remove('border-white/10');
+                inputField.placeholder = "لطفاً ابتدا نام خود را وارد کنید!";
+                setTimeout(() => {
+                    inputField.classList.remove('animate-shake', 'border-red-500');
+                    inputField.classList.add('border-white/10');
+                    inputField.placeholder = "نام خود را وارد کنید...";
+                }, 1500);
+                return;
+            }
+
+            document.getElementById('student-name-display').textContent = studentName;
+            document.getElementById('phase-intro').classList.add('hidden');
+            const phase2 = document.getElementById('phase-assessment');
+            phase2.classList.remove('hidden');
+            phase2.classList.add('slide-up');
+            
+            setupRatingSystem();
+            updateAssessmentUI();
+        });
+
+        const starContainer = document.getElementById('star-rating-system');
+        const scoreDisplayText = document.getElementById('score-display-text');
+        
+        function setupRatingSystem() {
+            starContainer.innerHTML = '';
+            for(let i = 10; i >= 1; i--) {
+                const star = document.createElement('span');
+                star.className = 'material-icons-round text-3xl md:text-[40px] rating-star';
+                star.textContent = 'star';
+                star.dataset.value = i;
+                
+                star.addEventListener('mouseenter', () => highlightStars(i));
+                starContainer.addEventListener('mouseleave', () => highlightStars(currentRating));
+                star.addEventListener('click', () => {
+                    currentRating = i;
+                    scoreDisplayText.textContent = toPersianNum(i);
+                    highlightStars(currentRating);
+                });
+                starContainer.appendChild(star);
+            }
+            highlightStars(currentRating);
+            scoreDisplayText.textContent = toPersianNum(currentRating);
+        }
+
+        function highlightStars(val) {
+            Array.from(starContainer.children).forEach(star => {
+                if(parseInt(star.dataset.value) <= val) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateAssessmentUI() {
+            const data = criteriaData[currentStep];
+            document.getElementById('criterion-title').textContent = data.fa;
+            document.getElementById('criterion-scenario').textContent = data.scenario;
+            document.getElementById('criterion-icon').textContent = data.icon;
+            document.getElementById('step-counter').textContent = toPersianNum(criteriaData.length) + ' / ' + toPersianNum(currentStep + 1);
+            
+            currentRating = 5;
+            highlightStars(currentRating);
+            scoreDisplayText.textContent = toPersianNum(currentRating);
+
+            const nextBtn = document.getElementById('next-btn');
+            if (currentStep === criteriaData.length - 1) {
+                nextBtn.innerHTML = 'مشاهده کارنامه نهایی';
+                nextBtn.className = 'w-full max-w-md mx-auto block bg-gradient-to-r from-yellow-500 to-yellow-600 text-blue-950 py-4 rounded-xl font-bold text-lg hover:shadow-[0_0_15px_rgba(251,191,36,0.4)] transition-all';
+            }
+        }
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            scores.push(currentRating);
+            currentStep++;
+            
+            if (currentStep < criteriaData.length) {
+                const content = document.getElementById('assessment-content');
+                content.classList.remove('fade-in');
+                void content.offsetWidth;
+                content.classList.add('fade-in');
+                updateAssessmentUI();
+            } else {
+                generateBanner();
+            }
+        });
+
+        function generateBanner() {
+            document.getElementById('phase-assessment').classList.add('hidden');
+            const phase3 = document.getElementById('phase-result');
+            phase3.classList.remove('hidden');
+            phase3.classList.add('slide-up');
+            
+            document.getElementById('banner-student-name').textContent = studentName;
+            
+            const currentDate = new Intl.DateTimeFormat('fa-IR').format(new Date());
+            document.getElementById('banner-date').textContent = currentDate;
+
+            const totalScore = scores.reduce((a, b) => a + b, 0);
+            const earnedStars = Math.round(totalScore / criteriaData.length); 
+            
+            document.getElementById('banner-star-text').textContent = `دانشجوی ${toPersianNum(earnedStars)} ستاره`;
+            
+            const bannerStarsContainer = document.getElementById('banner-stars');
+            bannerStarsContainer.innerHTML = '';
+            
+            const svgStar = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" /></svg>`;
+
+            for(let i=10; i>=1; i--) {
+                const s = document.createElement('div');
+                const isEarned = i <= earnedStars;
+                s.className = `w-7 h-7 flex items-center justify-center ${isEarned ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.8)]' : 'text-white/10'}`;
+                s.innerHTML = svgStar;
+                bannerStarsContainer.appendChild(s);
+            }
+            renderChart();
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            Chart.defaults.font.family = "'Vazirmatn', sans-serif";
+            Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
+            
+            if(radarChartInstance) radarChartInstance.destroy();
+
+            radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: criteriaData.map(c => c.fa),
+                    datasets: [{
+                        label: 'امتیاز',
+                        data: scores,
+                        backgroundColor: 'rgba(251, 191, 36, 0.2)',
+                        borderColor: '#fbbf24',
+                        pointBackgroundColor: '#001f3f',
+                        pointBorderColor: '#fbbf24',
+                        pointRadius: 4,
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    animation: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { font: { size: 11, family: 'Vazirmatn', weight: 'bold' } },
+                            ticks: { display: false, min: 0, max: 10 }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        document.getElementById('download-btn').addEventListener('click', function() {
+            const bannerElement = document.getElementById('export-banner');
+            const originalText = this.innerHTML;
+            this.innerHTML = 'در حال ذخیره‌سازی...';
+            
+            window.scrollTo(0, 0);
+            
+            htmlToImage.toPng(bannerElement, { 
+                quality: 1.0,
+                pixelRatio: 2,
+                backgroundColor: '#001f3f',
+                width: bannerElement.scrollWidth,
+                height: bannerElement.scrollHeight,
+                style: {
+                    margin: '0',
+                    transform: 'none'
+                }
+            })
+            .then(function (dataUrl) {
+                const link = document.createElement('a');
+                link.download = `TopStudent-${studentName.replace(/\s+/g, '-')}.png`;
+                link.href = dataUrl;
+                link.click();
+                document.getElementById('download-btn').innerHTML = originalText;
+            })
+            .catch(function (error) {
+                console.error('خطا در تولید تصویر!', error);
+                document.getElementById('download-btn').innerHTML = 'خطا در خروجی';
+                setTimeout(() => { document.getElementById('download-btn').innerHTML = originalText; }, 2000);
+            });
+        });
+
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            currentStep = 0;
+            scores = [];
+            document.getElementById('student-name-input').value = '';
+            
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.innerHTML = 'ثبت و سوال بعدی';
+            nextBtn.className = 'w-full max-w-md mx-auto block glass-card hover:bg-white/10 text-white py-4 rounded-xl font-bold text-lg transition-all';
+
+            document.getElementById('phase-result').classList.add('hidden');
+            const phase1 = document.getElementById('phase-intro');
+            phase1.classList.remove('hidden');
+            phase1.classList.add('slide-up');
+        });
+    </script>
+</body>
+</html>
